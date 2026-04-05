@@ -1,0 +1,193 @@
+{
+  "info": {
+    "name": "FragForge API",
+    "_postman_id": "fragforge-collection",
+    "description": "REST API test collection for FragForge Shader Forum",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base", "value": "http://localhost:4000" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": { "method": "GET", "url": "{{base}}/health" }
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST", "url": "{{base}}/api/auth/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}" }
+          }
+        },
+        {
+          "name": "Login (admin)",
+          "request": {
+            "method": "POST", "url": "{{base}}/api/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@fragforge.dev\",\n  \"password\": \"admin1234\"\n}" }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": { "method": "GET", "url": "{{base}}/api/auth/me" }
+        },
+        {
+          "name": "Logout",
+          "request": { "method": "POST", "url": "{{base}}/api/auth/logout" }
+        }
+      ]
+    },
+    {
+      "name": "Shaders",
+      "item": [
+        {
+          "name": "List Shaders",
+          "request": { "method": "GET", "url": "{{base}}/api/shaders?page=1&limit=12" }
+        },
+        {
+          "name": "Search Shaders",
+          "request": { "method": "GET", "url": "{{base}}/api/shaders?search=plasma" }
+        },
+        {
+          "name": "Get Shader by ID",
+          "request": { "method": "GET", "url": "{{base}}/api/shaders/SHADER_ID_HERE" }
+        },
+        {
+          "name": "Create Shader",
+          "request": {
+            "method": "POST", "url": "{{base}}/api/shaders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Red Screen\",\n  \"description\": \"Simple red shader\",\n  \"fragment_code\": \"void mainImage(out vec4 fragColor, in vec2 fragCoord) {\\n    fragColor = vec4(1.0, 0.0, 0.0, 1.0);\\n}\",\n  \"shader_type\": \"fragment\",\n  \"tags\": [\"simple\", \"test\"]\n}" }
+          }
+        },
+        {
+          "name": "Update Shader",
+          "request": {
+            "method": "PUT", "url": "{{base}}/api/shaders/SHADER_ID_HERE",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Updated Title\",\n  \"description\": \"Updated\",\n  \"fragment_code\": \"void mainImage(out vec4 c, in vec2 u) { c = vec4(0,1,0,1); }\",\n  \"shader_type\": \"fragment\",\n  \"tags\": [\"updated\"]\n}" }
+          }
+        },
+        {
+          "name": "Delete Shader",
+          "request": { "method": "DELETE", "url": "{{base}}/api/shaders/SHADER_ID_HERE" }
+        },
+        {
+          "name": "Toggle Active (admin)",
+          "request": {
+            "method": "PATCH", "url": "{{base}}/api/shaders/SHADER_ID_HERE/active",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"is_active\": false }" }
+          }
+        },
+        {
+          "name": "Like Shader",
+          "request": { "method": "POST", "url": "{{base}}/api/shaders/SHADER_ID_HERE/like" }
+        },
+        {
+          "name": "Get Comments",
+          "request": { "method": "GET", "url": "{{base}}/api/shaders/SHADER_ID_HERE/comments" }
+        },
+        {
+          "name": "Post Comment",
+          "request": {
+            "method": "POST", "url": "{{base}}/api/shaders/SHADER_ID_HERE/comments",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"content\": \"Great shader!\" }" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Stats",
+          "request": { "method": "GET", "url": "{{base}}/api/admin/stats" }
+        },
+        {
+          "name": "All Users",
+          "request": { "method": "GET", "url": "{{base}}/api/admin/users" }
+        },
+        {
+          "name": "All Shaders (incl inactive)",
+          "request": { "method": "GET", "url": "{{base}}/api/admin/shaders" }
+        },
+        {
+          "name": "Change User Role",
+          "request": {
+            "method": "PATCH", "url": "{{base}}/api/admin/users/USER_ID_HERE/role",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"role\": \"admin\" }" }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": { "method": "DELETE", "url": "{{base}}/api/admin/users/USER_ID_HERE" }
+        }
+      ]
+    },
+    {
+      "name": "GraphQL",
+      "item": [
+        {
+          "name": "Query — List Shaders",
+          "request": {
+            "method": "POST", "url": "{{base}}/graphql",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"{ shaders(page:1 limit:5) { shaders { id title author_name likes_count tags } total } }\"\n}" }
+          }
+        },
+        {
+          "name": "Query — Admin Stats",
+          "request": {
+            "method": "POST", "url": "{{base}}/graphql",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"{ adminStats { userCount shaderCount activeShaderCount commentCount } }\"\n}" }
+          }
+        },
+        {
+          "name": "Mutation — Create Shader",
+          "request": {
+            "method": "POST", "url": "{{base}}/graphql",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"mutation { createShader(title: \\\"GQL Shader\\\" fragment_code: \\\"void mainImage(out vec4 c, in vec2 u) { c=vec4(1); }\\\") { id title } }\"\n}" }
+          }
+        },
+        {
+          "name": "Mutation — Toggle Like",
+          "request": {
+            "method": "POST", "url": "{{base}}/graphql",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"mutation { likeShader(id: \\\"SHADER_ID_HERE\\\") { liked } }\"\n}" }
+          }
+        },
+        {
+          "name": "Mutation — Set Shader Active",
+          "request": {
+            "method": "POST", "url": "{{base}}/graphql",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"mutation { setShaderActive(id: \\\"SHADER_ID_HERE\\\", is_active: true) }\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "SSE Events",
+      "item": [
+        {
+          "name": "Connect to SSE stream",
+          "request": {
+            "method": "GET", "url": "{{base}}/api/events",
+            "header": [{ "key": "Accept", "value": "text/event-stream" }]
+          }
+        }
+      ]
+    }
+  ]
+}

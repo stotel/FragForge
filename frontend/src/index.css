@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: #000000;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #000000; }
+  ::-webkit-scrollbar-thumb { background: #4a4a4a; }
+  ::-webkit-scrollbar-thumb:hover { background: #666666; }
+
+  ::selection { background: #666666; color: #ffffff; }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 font-body font-medium text-sm transition-all duration-200 cursor-pointer select-none;
+  }
+  .btn-primary {
+    @apply btn bg-black text-white border border-black hover:bg-gray-100 hover:text-black active:scale-95;
+  }
+  .btn-ghost {
+    @apply btn border border-gray-400 text-black hover:border-black hover:bg-black hover:text-white active:scale-95;
+  }
+  .btn-danger {
+    @apply btn bg-black text-black border border-gray-400 hover:bg-gray-200 active:scale-95;
+  }
+  .input {
+    @apply w-full bg-white border border-gray-300 px-3 py-2 text-sm text-black
+           placeholder-gray-500 focus:outline-none focus:border-black focus:ring-0
+           transition-colors font-body;
+  }
+  .card {
+    @apply bg-white border border-gray-300 overflow-hidden transition-all duration-200;
+  }
+  .card-hover {
+    @apply card hover:border-black hover:shadow-sm;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-mono;
+  }
+  .tag {
+    @apply badge bg-gray-100 text-black border border-gray-300;
+  }
+}
+
+/* Code editor */
+.shader-editor {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  tab-size: 2;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #cccccc;
+  padding: 12px;
+  resize: vertical;
+  width: 100%;
+  min-height: 240px;
+}
+
+.shader-editor:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: none;
+}
+
+/* Canvas container */
+.canvas-wrap {
+  position: relative;
+  background: #000000;
+  overflow: hidden;
+}
+
+.canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
